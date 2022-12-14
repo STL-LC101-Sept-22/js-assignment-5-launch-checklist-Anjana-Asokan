@@ -2,25 +2,26 @@
 require('isomorphic-fetch');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
-   // Here is the HTML formatting for our mission target div.
-   /*
-                <h2>Mission Destination</h2>
+   console.log(`Going to :: ${name}, ${diameter}, ${star}, ${distance}, ${moons}, ${imageUrl}`)
+
+   console.log("My Document : \n"+document)
+    let myDestination = document.getElementById ("missionTarget");
+   myDestination.innerHTML = `<h2>Mission Destination</h2>
                 <ol>
-                    <li>Name: </li>
-                    <li>Diameter: </li>
+                    <li>Name: ${name}</li>
+                    <li>Diameter: ${diameter}</li>
                     <li>Star: ${star}</li>
-                    <li>Distance from Earth: </li>
-                    <li>Number of Moons: </li>
+                    <li>Distance from Earth: ${distance} </li>
+                    <li>Number of Moons: ${moons} </li>
                 </ol>
-                <img src="">
-   */
+                <img src="${imageUrl}">`
 }
 
 function validateInput(testInput) {
     if(testInput==""){
         return "Empty"
     }
-    else if(isNaN(testInput)) {
+    else if(isNaN(testInput)) { 
         return "Not a Number"
     }
    else{
@@ -52,21 +53,46 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
       launchStatus.innerHTML = "Shuttle not ready for launch";
       launchStatus.style.color = "red";
    }
-   document.getElementById("launchStatusCheck").style.visibility = "";
-
-    
+   document.getElementById("launchStatusCheck").style.visibility = "visible";  
 }
 
 async function myFetch() {
+    //console.log("Entered Here")
     let planetsReturned;
 
-    planetsReturned = await fetch().then( function(response) {
+    //console.log("Going to fetch Planets")
+    /*
+    planetsReturned = await fetch('https://handlers.education.launchcode.org/static/planets.json').then( function(response) {    
+        
+    response.text().then( function(dataStr) {
+            console.log("Checking on data")
+            //console.log(dataStr);
+            return  dataStr;
+         });
+        
         });
+        */
 
-    return planetsReturned;
+    const response = await fetch('https://handlers.education.launchcode.org/static/planets.json')
+    planetsReturned = await response.text()
+    //console.log("PlanetsReturned = "+planetsReturned)
+    return JSON.parse(planetsReturned);
 }
 
 function pickPlanet(planets) {
+    console.log("Type of my planets = "+typeof (planets));
+    
+    //console.log("My planets list = "+(planets));
+    let count = 0;
+    for(const values in planets)
+    {
+        count++;
+    }
+    console.log("Length of my planets list = "+count);
+    let randomNum = Math.floor(Math.random() * count);
+    console.log("randomNum = "+randomNum)
+
+    return planets[randomNum];
 }
 
 module.exports.addDestinationInfo = addDestinationInfo;
