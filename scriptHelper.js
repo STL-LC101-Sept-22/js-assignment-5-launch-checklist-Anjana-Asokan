@@ -2,9 +2,9 @@
 require('isomorphic-fetch');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
-   console.log(`Going to :: ${name}, ${diameter}, ${star}, ${distance}, ${moons}, ${imageUrl}`)
+   //console.log(`Going to :: ${name}, ${diameter}, ${star}, ${distance}, ${moons}, ${imageUrl}`)
 
-   console.log("My Document : \n"+document)
+   //console.log("My Document : \n"+document)
     let myDestination = document.getElementById ("missionTarget");
    myDestination.innerHTML = `<h2>Mission Destination</h2>
                 <ol>
@@ -16,6 +16,7 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
                 </ol>
                 <img src="${imageUrl}">`
 }
+
 
 function validateInput(testInput) {
     if(testInput==""){
@@ -31,7 +32,9 @@ function validateInput(testInput) {
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 
+    console.log("Entered formSubmission")
     let pilotStatus = document.getElementById("pilotStatus");
+    console.log("pilotStatus.innerHTML = "+pilotStatus.innerHTML);
     pilotStatus.innerHTML = `Pilot ${pilot} Ready`;
     let copilotStatus = document.getElementById("copilotStatus");
     copilotStatus.innerHTML = `Co-pilot ${copilot} Ready`;
@@ -53,7 +56,8 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
       launchStatus.innerHTML = "Shuttle not ready for launch";
       launchStatus.style.color = "red";
    }
-   document.getElementById("launchStatusCheck").style.visibility = "visible";  
+  // document.getElementById("launchStatusCheck").style.visibility = "visible";
+   document.getElementById("faultyItems").style.visibility = "visible";  
 }
 
 async function myFetch() {
@@ -74,9 +78,10 @@ async function myFetch() {
         */
 
     const response = await fetch('https://handlers.education.launchcode.org/static/planets.json')
-    planetsReturned = await response.text()
+    planetsReturned = await response.json()
+    return planetsReturned;
     //console.log("PlanetsReturned = "+planetsReturned)
-    return JSON.parse(planetsReturned);
+    //return JSON.parse(planetsReturned);
 }
 
 function pickPlanet(planets) {
